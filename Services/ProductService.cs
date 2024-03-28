@@ -15,13 +15,14 @@ namespace Services
             _repository = repository;
             _mapper = mapper;
         }
-        public async Task<BaseResponse<bool>> EditProductAsync(Product product)
+        
+        public async Task<BaseResponse<bool>> EditProductAsync(StoreProducts product)
         {
             var response = new BaseResponse<bool>();
             try
             {
                 //ValidateProduct(product);
-                var productEntity = await _repository.Product.GetProductByIdAsync(product.Id);
+                var productEntity = await _repository.Product.GetProductByIdWithDetailsAsync(product.Id);
                 if(productEntity==null)
                 {
                     response.StatusCode=Domain.Enums.StatusCode.NotFound;
@@ -43,7 +44,7 @@ namespace Services
             return response;
         }
 
-        public async Task<BaseResponse<IEnumerable<int>>> EditProductsAsync(IEnumerable<Product> products)
+        public async Task<BaseResponse<IEnumerable<int>>> EditProductsAsync(IEnumerable<StoreProducts> products)
         {
             var response = new BaseResponse<IEnumerable<int>>();
             try
@@ -53,7 +54,7 @@ namespace Services
                 foreach (var product in products)
                 {
                     //ValidateProduct(product);
-                    var productEntity = await _repository.Product.GetProductByIdAsync(product.Id);
+                    var productEntity = await _repository.Product.GetProductByIdWithDetailsAsync(product.Id);
                     if(productEntity==null)
                     {
                         notFoundIds.Add(product.Id);

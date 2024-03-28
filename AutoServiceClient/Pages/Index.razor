@@ -26,21 +26,20 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var product in _response.Data.Products)
+            @foreach (var storeProduct in _response.Data.StoreProducts)
             {
                 <tr>
-                    <td>@product.Id</td>
-                    <td>@product.Name</td>
-                    <td>@product.Quantity</td>
+                    <td>@storeProduct.Product.Id</td>
+                    <td>@storeProduct.Product.Name</td>
+                    <td>@storeProduct.Quantity</td>
                     <td>
-                        <button @onclick="() =>DecrementQuantity(product)">-</button>
-                        <button @onclick="() =>IncrementQuantity(product)">+</button>
+                        <button @onclick="() =>DecrementQuantity(storeProduct)">-</button>
+                        <button @onclick="() =>IncrementQuantity(storeProduct)">+</button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-    <button @onclick="() =>SaveChangesAsync()">Save</button>
 
     
  }
@@ -91,56 +90,14 @@ else
         if (_response.StatusCode == StatusCode.OK)
             return;
 
-        OpenModal(_response, _response.StatusCode.ToString());
 
     }
-
-    private void IncrementQuantity(Product product)
+    private async Task IncrementQuantity(StoreProducts storeProducts)
     {
-        product.Quantity++;
-        int index = _editedProducts.IndexOf(product);
-        if (index != -1)
-        {
-            _editedProducts[index] = product;
-        }
-        else
-        {
-            _editedProducts.Add(product);
-        }
-
-    }
-    private void DecrementQuantity(Product product)
-    {
-        product.Quantity--;
-        int index = _editedProducts.IndexOf(product);
-        if (index != -1)
-        {
-            _editedProducts[index] = product;
-        }
-        else
-        {
-            _editedProducts.Add(product);
-        }
-    }
-
-    private void OpenModal<T>(IBaseResponse<T> baseResponse, string tittle)
-    {
-        ModalContent = baseResponse.StatusCode == 0 ? "" : baseResponse.StatusCode.ToString();
-        ModalContent += "\t" + baseResponse.Message + "\t";
-        ModalContent += baseResponse.Data == null ? "" : baseResponse.Data.ToString();
-        IsModalOpen = true;
-    }
-
-    private void HandleModalStateChange(bool isOpen)
-    {
-        IsModalOpen = isOpen;
-    }
-
-    private async Task SaveChangesAsync()
-    {
-        var json = JsonConvert.SerializeObject(_editedProducts);
+        storeProducts.Quantity++;
+        var json = JsonConvert.SerializeObject(storeProducts);
         var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-        var response = await Http.PatchAsync("https://localhost:7148/products/", content);
+        var response = await Http.PatchAsync("https://localhost:7148/product/", content);
 
         if (_response == null)
         {
@@ -155,17 +112,78 @@ else
         }
 
         if (_response.StatusCode == StatusCode.OK)
-        { 
-            OpenModal(new BaseResponse<bool>
-            {
-                Message = "Успешно сохранено!"
-            }, "Успешно!");
             return;
-        }
 
         OpenModal(_response, _response.StatusCode.ToString());
 
     }
+    private async Task DecrementQuantity(StoreProducts storeProducts)
+    {
+        storeProducts.Quantity--;
+        var json = JsonConvert.SerializeObject(storeProducts);
+        var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+        var response = await Http.PatchAsync("https://localhost:7148/product/", content);
+
+        if (_response == null)
+        {
+            OpenModal(new BaseResponse<Store>
+                {
+                    StatusCode = StatusCode.InternalServerError,
+                    Message = "Сервер отправил пустой ответ."
+                },
+                StatusCode.InternalServerError.ToString()
+            );
+            return;
+        }
+
+        if (_response.StatusCode == StatusCode.OK)
+            return;
+        
+
+        OpenModal(_response, _response.StatusCode.ToString());
+
+    }
+    // private void IncrementQuantity(Product product)
+    // {
+    //     product.Quantity++;
+    //     int index = _editedProducts.IndexOf(product);
+    //     if (index != -1)
+    //     {
+    //         _editedProducts[index] = product;
+    //     }
+    //     else
+    //     {
+    //         _editedProducts.Add(product);
+    //     }
+
+    // }
+    // private void DecrementQuantity(Product product)
+    // {
+    //     product.Quantity--;
+    //     int index = _editedProducts.IndexOf(product);
+    //     if (index != -1)
+    //     {
+    //         _editedProducts[index] = product;
+    //     }
+    //     else
+    //     {
+    //         _editedProducts.Add(product);
+    //     }
+    // }
+
+    private void OpenModal<T>(IBaseResponse<T> baseResponse, string tittle)
+    {
+        ModalContent = baseResponse.StatusCode == 0 ? "" : baseResponse.StatusCode.ToString();
+        ModalContent += "\t" + baseResponse.Message + "\t";
+        ModalContent += baseResponse.Data == null ? "" : baseResponse.Data.ToString();
+        IsModalOpen = true;
+    }
+
+    private void HandleModalStateChange(bool isOpen)
+    {
+        IsModalOpen = isOpen;
+    }
+
         
     
 

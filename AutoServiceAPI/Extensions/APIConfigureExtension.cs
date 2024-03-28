@@ -29,22 +29,8 @@ namespace AutoServiceAPI.Extensions
                 .WithName("GetStoreByKeeper")
                 .WithTags("Getters");
 
-            app.MapPatch("/product", async ([FromServices]  IProductService _service,[FromBody] Product product) =>
-            {
-                var response = await _service.EditProductAsync(product);
-                if (response.StatusCode != StatusCode.OK)
-                {
-                    return Results.BadRequest(response);
-                }
-                return Results.Ok(response);
-            })
-                .Accepts<Product>("application/json")
-                .Produces<Product>(StatusCodes.Status200OK)
-                .Produces(StatusCodes.Status400BadRequest)
-                .WithName("EditProduct")
-                .WithTags("Updates");
 
-            app.MapPatch("/products", async ([FromServices] IProductService _service, [FromBody] IEnumerable<Product> products) =>
+            app.MapPatch("/products", async ([FromServices] IProductService _service, [FromBody] IEnumerable<StoreProducts> products) =>
             {
                 var response = await _service.EditProductsAsync(products);
                 if (response.StatusCode != StatusCode.OK)
@@ -53,10 +39,25 @@ namespace AutoServiceAPI.Extensions
                 }
                 return Results.Ok(response);
             })
-                .Accepts<Product>("application/json")
+                .Accepts<StoreProducts>("application/json")
                 .Produces<BaseResponse<IEnumerable<int>>>(StatusCodes.Status200OK)
                 .Produces<BaseResponse<IEnumerable<int>>>(StatusCodes.Status400BadRequest)
                 .WithName("EditProducts")
+                .WithTags("Updates");
+
+            app.MapPatch("/product", async ([FromServices] IProductService _service, [FromBody] StoreProducts product) =>
+            {
+                var response = await _service.EditProductAsync(product);
+                if (response.StatusCode != StatusCode.OK)
+                {
+                    return Results.BadRequest(response);
+                }
+                return Results.Ok(response);
+            })
+                .Accepts<StoreProducts>("application/json")
+                .Produces<BaseResponse<int>>(StatusCodes.Status200OK)
+                .Produces<BaseResponse<int>>(StatusCodes.Status400BadRequest)
+                .WithName("EditProduct")
                 .WithTags("Updates");
         }
 

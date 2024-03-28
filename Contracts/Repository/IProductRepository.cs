@@ -2,14 +2,14 @@
 
 namespace Contracts.Repository
 {
-    public interface IProductRepository : IRepositoryBase<Product>
+    public interface IProductRepository : IRepositoryBase<StoreProducts>
     {
 
-        Task<IEnumerable<Product>> GetAllProductsAsync();
-        Task<Product> GetProductByIdAsync(int id);
-        Task<Product> GetProductWithDetailsAsync(int id);
-        void CreateProduct(Product product);
-        void UpdateProduct(Product product);
-        void DeleteProduct(Product product);
+        Task<IEnumerable<StoreProducts>> GetAllProductsAsync();
+        Task<StoreProducts> GetProductByIdAsync(int id);
+        Task<StoreProducts> GetProductByIdWithDetailsAsync(int id);
+        void CreateProduct(StoreProducts product);
+        void UpdateProduct(StoreProducts product);
+        void DeleteProduct(StoreProducts product);
     }
 }

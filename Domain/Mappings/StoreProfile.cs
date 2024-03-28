@@ -14,6 +14,7 @@ namespace Domain.Mappings
         {
             CreateMap<Keeper, Keeper>();
             CreateMap<Store, Keeper>();
+            CreateMap<StoreProducts, StoreProducts>();
             CreateMap<Product, Product>();  
         }
     }

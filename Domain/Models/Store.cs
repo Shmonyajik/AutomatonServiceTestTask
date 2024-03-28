@@ -15,8 +15,8 @@ namespace Domain.Models
         [JsonProperty("keeper")]
         public virtual Keeper? Keeper { get; set; }
 
-        [JsonProperty("products")]
-        public virtual ICollection<Product> Products { get; set; }
+        [JsonProperty("storeProducts")]
+        public virtual ICollection<StoreProducts> StoreProducts { get; set; }
 
 
     }

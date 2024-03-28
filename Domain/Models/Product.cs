@@ -12,11 +12,7 @@ namespace Domain.Models
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("quantity")]
-        public int Quantity { get; set; }
 
-        [JsonProperty("storeId")]
-        public int StoreId { get; set; }
 
     }
 }

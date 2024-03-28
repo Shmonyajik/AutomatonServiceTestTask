@@ -10,8 +10,8 @@ namespace Contracts.Services
 {
     public interface IProductService
     {
-        Task<BaseResponse<bool>> EditProductAsync(Product product);
-        Task<BaseResponse<IEnumerable<int>>> EditProductsAsync(IEnumerable<Product> products);
+        Task<BaseResponse<bool>> EditProductAsync(StoreProducts product);
+        Task<BaseResponse<IEnumerable<int>>> EditProductsAsync(IEnumerable<StoreProducts> products);
 
 
     }

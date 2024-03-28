@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Contracts\Contracts.csproj" />
-    <ProjectReference Include="..\DAL\Contracts.csproj" />
   </ItemGroup>
 
 </Project>

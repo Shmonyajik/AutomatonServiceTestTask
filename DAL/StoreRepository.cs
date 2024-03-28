@@ -26,7 +26,8 @@ namespace DAL
         {
             return await FindByCondition(Store => Store.Id.Equals(id))
                 .Include(st=>st.Keeper)
-                .Include(st => st.Products)
+                .Include(st => st.StoreProducts)
+                .ThenInclude(pr=>pr.Product)
                 .FirstOrDefaultAsync();
         }
 
@@ -34,7 +35,8 @@ namespace DAL
         {
             return await FindByCondition(Store => Store.KeeperId.Equals(keeperId))
                 .Include(st => st.Keeper)
-                .Include(st => st.Products)
+                .Include(st => st.StoreProducts)
+                .ThenInclude(pr => pr.Product)
                 .FirstOrDefaultAsync();
         }
         public void CreateStore(Store store)
